@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/garethrees/Downloads/k8s-play-unique-e5b5cf98bbc7.json"
 
-# BQ public source data: bigquery-public-data.covid19_italy.national_trends (1291 rows only)
+# BQ public source data: bigquery-public-data.san_francisco_bikeshare.bikeshare_trips (983,648 rows only)
 
 client = bigquery.Client()
 
