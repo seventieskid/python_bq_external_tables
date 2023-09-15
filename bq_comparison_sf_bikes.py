@@ -21,16 +21,32 @@ external_hps_query = """
     SELECT * FROM `DATAHUB_EXTERNAL.san_francisco_bikeshare_trips_hps`
     WHERE hps_bike_number = 11 AND hps_end_station_id = 14
 """
+external_biglake_query = """
+    SELECT * FROM `DATAHUB_EXTERNAL.san_francisco_bikeshare_trips_biglake`
+    WHERE bike_number = 11 AND end_station_id = 14
+"""
+external_biglake_hps_query = """
+    SELECT * FROM `DATAHUB_EXTERNAL.san_francisco_bikeshare_trips_biglake_hps`
+    WHERE hps_bike_number = 11 AND hps_end_station_id = 14
+"""
 
 job_config = bigquery.QueryJobConfig(use_query_cache=False)
 
 #create data
 table = []
 
-col_names = ["Native SELECT (secs)", "External SELECT (secs)", "External With HPS SELECT (secs)", "External % Slower", "External With HPS % Slower"]
+col_names = [ "Native SELECT (secs)", \
+             "External SELECT (secs)", \
+             "External With HPS SELECT (secs)", \
+             "External Big Lake SELECT (secs)", \
+             "External Big Lake With HPS SELECT (secs)", \
+             "External % Slower", \
+             "External With HPS % Slower", \
+             "External Big Lake % Slower", \
+             "External Big Lake With HPS % Slower" ]
 
 for i in range(200):
-    row = [0,0,0,0,0]
+    row = [0,0,0,0,0,0,0,0,0]
     start_time = time.time()
     native_query_job = client.query(native_query, job_config)
     row[0] = time.time() - start_time
@@ -45,17 +61,33 @@ for i in range(200):
     external_with_hps_query_job = clientExternalWithHPS.query(external_hps_query, job_config)
     row[2] = time.time() - start_time
 
-    print(f'{i} - NATIVE={native_query_job.result().total_rows}, EXTERNAL={external_query_job.result().total_rows}, EXTERNAL_HPS={external_with_hps_query_job.result().total_rows}')
+    start_time = time.time()
+    clientExternalBigLake = bigquery.Client()
+    external_biglake_query_job = clientExternalBigLake.query(external_biglake_query, job_config)
+    row[3] = time.time() - start_time
 
-    row[3] = round(((row[1] - row[0])/(row[0])) * 100, 0)
+    start_time = time.time()
+    clientExternalBigLakeWithHPS = bigquery.Client()
+    external_biglake_hps_query_job = clientExternalBigLakeWithHPS.query(external_biglake_hps_query, job_config)
+    row[4] = time.time() - start_time
 
-    row[4] = round(((row[2] - row[0])/(row[0])) * 100, 0)
+    print(f'{i} - NATIVE={native_query_job.result().total_rows}, \
+          EXTERNAL={external_query_job.result().total_rows}, \
+          EXTERNAL_HPS={external_with_hps_query_job.result().total_rows} \
+          EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
+          EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
+
+    row[5] = round(((row[1] - row[0])/(row[0])) * 100, 0)
+
+    row[6] = round(((row[2] - row[0])/(row[0])) * 100, 0)
+
+    row[7] = round(((row[3] - row[0])/(row[0])) * 100, 0)
+
+    row[8] = round(((row[4] - row[0])/(row[0])) * 100, 0)
 
     table.append(row)
 
-print(tabulate(table, headers=col_names, tablefmt="grid", showindex="always"))
+#print(tabulate(table, headers=col_names, tablefmt="grid", showindex="always"))
 
-content2=tabulate(table, tablefmt="tsv")
-text_file=open("200_iters_select_bike_number_11_end_station_14_983648_standard.csv","w")
-text_file.write(content2)
-text_file.close()
+with open('results/200_iters_select_bike_number_11_end_station_14_983648_standard_biglake_metadata_caching.csv', 'w') as f:
+    f.write(tabulate(table, headers=col_names))
