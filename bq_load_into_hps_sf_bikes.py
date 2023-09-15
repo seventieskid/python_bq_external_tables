@@ -25,21 +25,22 @@ df_bike_number_groups = df.groupby(df['bike_number'])
 client = storage.Client()
 bucket = client.get_bucket(BUCKET_NAME)
 
-print(f'Bike number: {df_bike_number_groups.ngroups}')
-
 partitions = 0
 
 for bike_number, df_bike_number_group in df_bike_number_groups:
 
+    print(f'Bike number: {df_bike_number_groups.ngroups}')
+
     df_end_station_id_groups = df_bike_number_group.groupby(df['end_station_id'])
 
-    print(f'\tEnd station id: {df_end_station_id_groups.ngroups}')
-
     for end_station_id, df_end_station_id_group in df_end_station_id_groups:
+      
+      print(f'\tEnd station id: {df_end_station_id_groups.ngroups}')
+
       # Create a filename based on the group name
       filename = f'{bike_number}_{end_station_id}.parquet'
       
-      # Write the group to a CSV file
+      # Write the group to a parquet file
       df_end_station_id_group.to_parquet(filename, compression='gzip', index=False)
 
       blob = bucket.blob(f'san_francisco_bikeshare_trips_hps/hps_bike_number={bike_number}/hps_end_station_id={end_station_id}/{str(uuid.uuid4())}.parquet')
