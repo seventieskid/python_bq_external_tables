@@ -45,7 +45,7 @@ col_names = [ "Native SELECT (secs)", \
              "External Big Lake % Slower", \
              "External Big Lake With HPS % Slower" ]
 
-for i in range(200):
+for i in range(1000):
     row = [0,0,0,0,0,0,0,0,0]
     start_time = time.time()
     native_query_job = client.query(native_query, job_config)
@@ -72,10 +72,10 @@ for i in range(200):
     row[4] = time.time() - start_time
 
     print(f'{i} - NATIVE={native_query_job.result().total_rows}, \
-          EXTERNAL={external_query_job.result().total_rows}, \
-          EXTERNAL_HPS={external_with_hps_query_job.result().total_rows} \
-          EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
-          EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
+EXTERNAL={external_query_job.result().total_rows}, \
+EXTERNAL_HPS={external_with_hps_query_job.result().total_rows} \
+EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
+EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
 
     row[5] = round(((row[1] - row[0])/(row[0])) * 100, 0)
 
@@ -89,5 +89,5 @@ for i in range(200):
 
 #print(tabulate(table, headers=col_names, tablefmt="grid", showindex="always"))
 
-with open('results/200_iters_select_bike_number_11_end_station_14_983648_standard_biglake_metadata_caching.csv', 'w') as f:
+with open('results/1000_iters_select_bike_number_11_end_station_14_983648_standard_biglake_metadata_caching.csv', 'w') as f:
     f.write(tabulate(table, headers=col_names))
