@@ -27,7 +27,7 @@ job_config = bigquery.QueryJobConfig(use_query_cache=False)
 #create data
 table = []
 
-col_names = ["Native SELECT (ms)", "External SELECT (ms)", "External With HPS SELECT (ms)", "External % Slower", "External With HPS % Slower"]
+col_names = ["Native SELECT (secs)", "External SELECT (secs)", "External With HPS SELECT (secs)", "External % Slower", "External With HPS % Slower"]
 
 for i in range(200):
     row = [0,0,0,0,0]

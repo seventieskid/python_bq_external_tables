@@ -29,13 +29,13 @@ partitions = 0
 
 for bike_number, df_bike_number_group in df_bike_number_groups:
 
-    print(f'Bike number: {df_bike_number_groups.ngroups}')
+    print(f'Bike number: {bike_number}')
 
     df_end_station_id_groups = df_bike_number_group.groupby(df['end_station_id'])
 
     for end_station_id, df_end_station_id_group in df_end_station_id_groups:
       
-      print(f'\tEnd station id: {df_end_station_id_groups.ngroups}')
+      print(f'\tEnd station id: {end_station_id}')
 
       # Create a filename based on the group name
       filename = f'{bike_number}_{end_station_id}.parquet'
