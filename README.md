@@ -35,7 +35,7 @@ DELETE FROM DATAHUB.new_york_citibike_bikeshare_trips where bikeid >= 16806
 
 CREATE OR REPLACE EXTERNAL TABLE
   `DATAHUB_EXTERNAL.new_york_bikeshare_trips_biglake`
-  WITH CONNECTION `358013237822.europe-west2.san_francisco_bikeshare_trips`
+  WITH CONNECTION `358013237822.europe-west2.new_york_bikeshare_trips_biglake`
   OPTIONS(
     format = "PARQUET",
     uris = ['gs://k8s-play-unique-new-york-citibike/raw/*'],
@@ -50,7 +50,7 @@ CREATE OR REPLACE EXTERNAL TABLE
     hps_bike_number INTEGER,
     hps_end_station_id INTEGER
   )
-  WITH CONNECTION `358013237822.europe-west2.san_francisco_bikeshare_trips_hps`
+  WITH CONNECTION `358013237822.europe-west2.new_york_bikeshare_trips_biglake_hps`
   OPTIONS(
     format = "PARQUET",
     hive_partition_uri_prefix = "gs://k8s-play-unique-new-york-citibike/new_york_bikeshare_trips_hps",
