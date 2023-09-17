@@ -45,7 +45,7 @@ col_names = [ "Native SELECT (secs)", \
              "External Big Lake % Slower", \
              "External Big Lake With HPS % Slower" ]
 
-samples = 10
+samples = 1000
 
 for i in range(samples):
     row = [0,0,0,0,0,0,0,0,0]
