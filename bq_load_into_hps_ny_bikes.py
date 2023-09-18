@@ -43,7 +43,7 @@ for bike_number, df_bike_number_group in df_bike_number_groups:
       # Write the group to a parquet file
       df_end_station_id_group.to_parquet(filename, compression='gzip', index=False)
 
-      blob = bucket.blob(f'new_york_bikeshare_trips_hps/hps_bike_number={bike_number}/hps_end_station_id={end_station_id}/{str(uuid.uuid4())}.parquet')
+      blob = bucket.blob(f'new_york_bikeshare_trips_biglake_hps/hps_bike_number={bike_number}/hps_end_station_id={end_station_id}/{str(uuid.uuid4())}.parquet')
       blob.upload_from_filename(filename)
 
       # Remove local file
