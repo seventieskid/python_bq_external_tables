@@ -31,9 +31,6 @@ for bike_number, df_bike_number_group in df_bike_number_groups:
 
     print(f'Bike id: {bike_number}')
 
-    if int(bike_number) < 16806:
-      continue
-
     df_end_station_id_groups = df_bike_number_group.groupby(df['end_station_id'])
 
     for end_station_id, df_end_station_id_group in df_end_station_id_groups:

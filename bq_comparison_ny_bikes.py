@@ -46,6 +46,7 @@ col_names = [ "Native SELECT (secs)", \
              "External Big Lake With HPS % Slower" ]
 
 samples = 1000
+row_count = 50991200
 
 for i in range(samples):
     row = [0,0,0,0,0,0,0,0,0]
@@ -95,5 +96,5 @@ EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
 
 #print(tabulate(table, headers=col_names, tablefmt="grid", showindex="always"))
 
-with open(f'results/new_york/{samples}_iters_select_bikeid_14627_end_station_72_10939860_standard_biglake_metadata_caching.csv', 'w') as f:
+with open(f'results/new_york/{samples}_iters_select_bikeid_14627_end_station_72_{row_count}_standard_biglake_metadata_caching.csv', 'w') as f:
     f.write(tabulate(table, headers=col_names))
