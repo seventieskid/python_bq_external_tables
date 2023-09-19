@@ -45,8 +45,10 @@ col_names = [ "Native SELECT (secs)", \
              "External Big Lake % Slower", \
              "External Big Lake With HPS % Slower" ]
 
-samples = 1000
-row_count = 50991200
+# Flags used to generate unique output file names
+samples = 20
+row_count = 1009431
+metadata_caching = "off"
 
 for i in range(samples):
     row = [0,0,0,0,0,0,0,0,0]
@@ -54,15 +56,15 @@ for i in range(samples):
     native_query_job = client.query(native_query, job_config)
     row[0] = time.time() - start_time
 
-    # start_time = time.time()
-    # clientExternal = bigquery.Client()
-    # external_query_job = clientExternal.query(external_query, job_config)
-    # row[1] = time.time() - start_time
+    start_time = time.time()
+    clientExternal = bigquery.Client()
+    external_query_job = clientExternal.query(external_query, job_config)
+    row[1] = time.time() - start_time
 
-    # start_time = time.time()
-    # clientExternalWithHPS = bigquery.Client()
-    # external_with_hps_query_job = clientExternalWithHPS.query(external_hps_query, job_config)
-    # row[2] = time.time() - start_time
+    start_time = time.time()
+    clientExternalWithHPS = bigquery.Client()
+    external_with_hps_query_job = clientExternalWithHPS.query(external_hps_query, job_config)
+    row[2] = time.time() - start_time
 
     start_time = time.time()
     clientExternalBigLake = bigquery.Client()
@@ -74,15 +76,15 @@ for i in range(samples):
     external_biglake_hps_query_job = clientExternalBigLakeWithHPS.query(external_biglake_hps_query, job_config)
     row[4] = time.time() - start_time
 
-#     print(f'{i} - NATIVE={native_query_job.result().total_rows}, \
-# EXTERNAL={external_query_job.result().total_rows}, \
-# EXTERNAL_HPS={external_with_hps_query_job.result().total_rows} \
-# EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
-# EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
-
     print(f'{i} - NATIVE={native_query_job.result().total_rows}, \
+EXTERNAL={external_query_job.result().total_rows}, \
+EXTERNAL_HPS={external_with_hps_query_job.result().total_rows} \
 EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
 EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
+
+#     print(f'{i} - NATIVE={native_query_job.result().total_rows}, \
+# EXTERNAL_BIGLAKE={external_biglake_query_job.result().total_rows}, \
+# EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
     
     row[5] = round(((row[1] - row[0])/(row[0])) * 100, 0)
 
@@ -96,5 +98,5 @@ EXTERNAL_BIGLAKE_HPS={external_biglake_hps_query_job.result().total_rows} ')
 
 #print(tabulate(table, headers=col_names, tablefmt="grid", showindex="always"))
 
-with open(f'results/new_york/{samples}_iters_select_bikeid_14627_end_station_72_{row_count}_standard_biglake_metadata_caching.csv', 'w') as f:
+with open(f'results/new_york/{samples}_iters_select_bikeid_14627_end_station_72_{row_count}_standard_biglake_metadata_caching_{metadata_caching}.csv', 'w') as f:
     f.write(tabulate(table, headers=col_names))

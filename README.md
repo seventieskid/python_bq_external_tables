@@ -28,8 +28,8 @@ CREATE OR REPLACE EXTERNAL TABLE
   WITH CONNECTION `358013237822.europe-west2.new_york_bikeshare_trips_biglake_hps`
   OPTIONS(
     format = "PARQUET",
-    hive_partition_uri_prefix = "gs://k8s-play-unique-new-york-citibike/new_york_bikeshare_trips_hps",
-    uris = ['gs://k8s-play-unique-new-york-citibike/new_york_bikeshare_trips_hps/*'],
+    hive_partition_uri_prefix = "gs://k8s-play-unique-new-york-citibike/new_york_bikeshare_trips_biglake_hps",
+    uris = ['gs://k8s-play-unique-new-york-citibike/new_york_bikeshare_trips_biglake_hps/*'],
     max_staleness = INTERVAL 4 HOUR,
     metadata_cache_mode = 'AUTOMATIC'
     );
